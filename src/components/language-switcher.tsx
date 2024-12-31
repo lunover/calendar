@@ -14,7 +14,7 @@ export default function LanguageSwitcher({language}: {language: string}) {
                 English
               </TabsTrigger>
               <TabsTrigger value="np" className="rounded-none">
-                Nepali
+                नेपाली
         </TabsTrigger>
       </TabsList>
     </Tabs>
