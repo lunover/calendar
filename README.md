@@ -1,8 +1,18 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nepali Calendar
+
+## Project Description
+
+In today's digital age, finding out what today's date is in the Nepali calendar is easy, thanks to the plethora of online calendars and patros. However, these platforms are often cluttered with ads and unnecessary content. Our project aims to solve this by providing a simple, ad-free calendar that includes public holidays. This open-source project can be used for personal projects or organizations, but creating copies for sale is not allowed. We are continuously adding more features, so be sure to check out our roadmap.
+
+We have also introduced a basic API for date conversion and to get the current date in AD or BS. The available endpoints are:
+
+- `/api/convert/ad-bs/YYYY-MM-DD` to convert a date from AD to BS.
+- `/api/convert/bs-ad/YYYY-MM-DD` to convert a date from BS to AD.
+- To get today's date, you can simply use "today" in the endpoint `/api/convert/ad-bs/today`.
 
 ## Getting Started
 
-First, run the development server:
+To start and run the project locally, follow the standard Next.js documentation:
 
 ```bash
 npm run dev
@@ -16,9 +26,18 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## License
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International License](https://creativecommons.org/licenses/by-nc/4.0/). You are free to use and adapt the project for personal and organizational use, but commercial use is not permitted.
+
+## Roadmap
+
+- [ ] Obtain a .com.np domain
+- [ ] Add more API endpoints with documentation
+- [ ] Simplify the UI/UX
+- [ ] Introduce fully customizable features
+- [ ] Add a feature to create custom calendars for personal use and organizations
+- [ ] Open to more ideas and contributions
 
 ## Learn More
 
