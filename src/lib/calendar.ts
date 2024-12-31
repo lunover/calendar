@@ -3,6 +3,7 @@
 import fs from "fs";
 import path from "path";
 import { CalendarData } from "@/types/calendar";
+import { ENGLISH_MONTHS_NAME, NEPALI_MONTHS_NAME } from "@/lib/constants";
 
 function getNepaliDate(date: string, convert: string) {
   const yearString = date.split("-")[0];
@@ -38,4 +39,12 @@ function getCalendarData(year: string): CalendarData | { error: string } {
   }
 }
 
-export { getNepaliDate, getCalendarData };
+function getMonthName(month: number): string {
+  return NEPALI_MONTHS_NAME.get(month) || "";
+}
+
+function getMonthEnglishName(month: number): string {
+  return ENGLISH_MONTHS_NAME.get(month) || "";
+}
+
+export { getNepaliDate, getCalendarData, getMonthName, getMonthEnglishName };
