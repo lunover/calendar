@@ -6,6 +6,7 @@ import FullCalendarSkeleton from "./full-calendar-skeleton";
 import CalendarHeader from "./calendar-header";
 import CalendarWeeks from "./calendar-weeks";
 import CalendarDates from "./calendar-dates";
+import { getCalendarData } from "@/lib/calendar";
 
 interface FullCalendarProps {
   year: number;
@@ -14,16 +15,24 @@ interface FullCalendarProps {
 }
 
 async function fetchCalendarData(year: number): Promise<CalendarData | null> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/calendar/${year}`
-  );
+  // const response = await fetch(
+  //   `${process.env.NEXT_PUBLIC_API_URL}/api/calendar/${year}`
+  // );
 
-  if (!response.ok) {
-    // throw new Error("Failed to fetch calendar data");
+  // if (!response.ok) {
+  //   // throw new Error("Failed to fetch calendar data");
+  //   return null;
+  // }
+
+  // return response.json();
+
+  const data = getCalendarData(year.toString());
+
+  if ("error" in data) {
     return null;
   }
 
-  return response.json();
+  return data;
 }
 
 function FullCalendar({
