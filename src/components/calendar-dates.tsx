@@ -55,7 +55,7 @@ function formatEnglishDate(enDate: string): string {
   const date = new Date(enDate);
   const options: Intl.DateTimeFormatOptions = {
     month: "short",
-    day: "numeric",
+    day: "numeric"
   };
   return date.toLocaleDateString("en-US", options);
 }
@@ -63,7 +63,7 @@ function formatEnglishDate(enDate: string): string {
 export default function CalendarDates({
   selectedMonth,
   calendarData,
-  language,
+  language
 }: CalendarDatesProps) {
   const isToday = (day: Day | null) => {
     if (!day) return false;
@@ -89,54 +89,68 @@ export default function CalendarDates({
         <div
           key={index}
           className={cn(
-            "aspect-square md:aspect-[4/2] pt-2 pb-10 px-3 font-mono relative transition-all duration-100 text-left flex flex-col space-y-2 select-none bg-background h-full overflow-hidden text-4xl md:text-4xl lg:text-5xl 2xl:text-6xl",
+            "aspect-square md:aspect-[5/4] lg:aspect-[3/2] xl:aspect-[4/2] py-2 lg:py-4 px-3 font-mono relative transition-all duration-100 text-left flex flex-col justify-center space-y-2 select-none bg-background h-full overflow-hidden text-xl sm:text-2xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-6xl",
             !dayObj?.belongsToCurrentMonth &&
               "bg-[repeating-linear-gradient(-60deg,#dbdbdb,#dbdbdb_1px,transparent_1px,transparent_5px)] dark:bg-[repeating-linear-gradient(-60deg,#2C2C2C,#2C2C2C_1px,transparent_1px,transparent_5px)] opacity-40",
-            isToday(dayObj?.day || null) && "text-green-600 border-4 border-green-600",
+            isToday(dayObj?.day || null) &&
+              "text-green-600 border-4 border-green-600",
             showEventsAndTithi && "text-lg",
             isSaturday(dayObj?.day || null) && "text-destructive"
           )}
         >
           {dayObj ? (
             <>
-              <div className="flex justify-between md:items-center flex-col md:flex-row">
-                <div className={cn("flex items-center space-x-2", dayObj?.day?.holiday && "text-destructive")}>
+              <div className="flex justify-between lg:items-center flex-col lg:flex-row">
+                <div
+                  className={cn(
+                    "flex items-center space-x-2",
+                    dayObj?.day?.holiday && "text-destructive"
+                  )}
+                >
                   <span>
                     {language === "en" ? dayObj.day.day.en : dayObj.day.day.np}
                   </span>
                 </div>
-                <div className={cn("text-sm lg:text-lg xl:text-xl 2xl:text-2xl text-gray-500", showEventsAndTithi && "text-sm", ((!dayObj?.belongsToCurrentMonth && dayObj?.day?.holiday) || isSaturday(dayObj?.day || null)) && "text-destructive")}>
+                <div
+                  className={cn(
+                    "text-sm lg:text-base xl:text-xl 2xl:text-2xl text-gray-500 lg:text-right",
+                    showEventsAndTithi && "text-sm",
+                    ((!dayObj?.belongsToCurrentMonth && dayObj?.day?.holiday) ||
+                      isSaturday(dayObj?.day || null)) &&
+                      "text-destructive"
+                  )}
+                >
                   {formatEnglishDate(dayObj.day.enDate)}
                 </div>
               </div>
 
-              {showEventsAndTithi &&
-              <div className="flex flex-col font-sans w-full">
-                {dayObj?.belongsToCurrentMonth && dayObj.day.tithi.en && (
-                  <div className="inline-flex items-center border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground/50 mb-2">
-                    {language === "en"
-                      ? dayObj.day.tithi.en
-                      : dayObj.day.tithi.np}
-                  </div>
-                )}
-                {dayObj?.belongsToCurrentMonth &&
-                  dayObj.day.events.length > 0 && (
-                    <>
-                      <div className="text-xs bg-muted text-muted-foreground py-1 px-2 w-full text-left min-h-[23px] truncate">
-                        &mdash;{" "}
-                        {language === "en"
-                          ? dayObj.day.events[0].name
-                          : dayObj.day.events[0].name}
-                      </div>
-                      {dayObj.day.events.length > 1 && (
-                        <div className="text-xs bg-muted text-muted-foreground py-1 px-2 w-full text-left min-h-[23px] truncate">
-                          + {dayObj.day.events.length - 1} more events
-                        </div>
-                      )}
-                    </>
+              {showEventsAndTithi && (
+                <div className="flex flex-col font-sans w-full">
+                  {dayObj?.belongsToCurrentMonth && dayObj.day.tithi.en && (
+                    <div className="inline-flex items-center border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground/50 mb-2">
+                      {language === "en"
+                        ? dayObj.day.tithi.en
+                        : dayObj.day.tithi.np}
+                    </div>
                   )}
-              </div>
-}
+                  {dayObj?.belongsToCurrentMonth &&
+                    dayObj.day.events.length > 0 && (
+                      <>
+                        <div className="text-xs bg-muted text-muted-foreground py-1 px-2 w-full text-left min-h-[23px] truncate">
+                          &mdash;{" "}
+                          {language === "en"
+                            ? dayObj.day.events[0].name
+                            : dayObj.day.events[0].name}
+                        </div>
+                        {dayObj.day.events.length > 1 && (
+                          <div className="text-xs bg-muted text-muted-foreground py-1 px-2 w-full text-left min-h-[23px] truncate">
+                            + {dayObj.day.events.length - 1} more events
+                          </div>
+                        )}
+                      </>
+                    )}
+                </div>
+              )}
             </>
           ) : null}
         </div>
