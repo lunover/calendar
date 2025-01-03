@@ -55,7 +55,7 @@ function getEnglishDateArray(enDate: string): string[] {
   const date = new Date(enDate);
   const options: Intl.DateTimeFormatOptions = {
     month: "short",
-    day: "numeric",
+    day: "numeric"
   };
   return date.toLocaleDateString("en-US", options).split(" ");
 }
@@ -63,7 +63,7 @@ function getEnglishDateArray(enDate: string): string[] {
 export default function CalendarDates({
   selectedMonth,
   calendarData,
-  language,
+  language
 }: CalendarDatesProps) {
   const isToday = (day: Day | null) => {
     if (!day) return false;
@@ -99,8 +99,13 @@ export default function CalendarDates({
         >
           {dayObj ? (
             <>
-              <div className="flex justify-between md:items-center flex-col md:flex-row">
-                <div className={cn("flex items-center space-x-2", dayObj?.day?.holiday && "text-destructive")}>
+              <div className="flex justify-between lg:items-center flex-col lg:flex-row">
+                <div
+                  className={cn(
+                    "flex items-center space-x-2",
+                    dayObj?.day?.holiday && "text-destructive"
+                  )}
+                >
                   <span>
                     {language === "en" ? dayObj.day.day.en : dayObj.day.day.np}
                   </span>
@@ -112,33 +117,33 @@ export default function CalendarDates({
                 </div>
               </div>
 
-              {showEventsAndTithi &&
-              <div className="flex flex-col font-sans w-full">
-                {dayObj?.belongsToCurrentMonth && dayObj.day.tithi.en && (
-                  <div className="inline-flex items-center border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground/50 mb-2">
-                    {language === "en"
-                      ? dayObj.day.tithi.en
-                      : dayObj.day.tithi.np}
-                  </div>
-                )}
-                {dayObj?.belongsToCurrentMonth &&
-                  dayObj.day.events.length > 0 && (
-                    <>
-                      <div className="text-xs bg-muted text-muted-foreground py-1 px-2 w-full text-left min-h-[23px] truncate">
-                        &mdash;{" "}
-                        {language === "en"
-                          ? dayObj.day.events[0].name
-                          : dayObj.day.events[0].name}
-                      </div>
-                      {dayObj.day.events.length > 1 && (
-                        <div className="text-xs bg-muted text-muted-foreground py-1 px-2 w-full text-left min-h-[23px] truncate">
-                          + {dayObj.day.events.length - 1} more events
-                        </div>
-                      )}
-                    </>
+              {showEventsAndTithi && (
+                <div className="flex flex-col font-sans w-full">
+                  {dayObj?.belongsToCurrentMonth && dayObj.day.tithi.en && (
+                    <div className="inline-flex items-center border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground/50 mb-2">
+                      {language === "en"
+                        ? dayObj.day.tithi.en
+                        : dayObj.day.tithi.np}
+                    </div>
                   )}
-              </div>
-}
+                  {dayObj?.belongsToCurrentMonth &&
+                    dayObj.day.events.length > 0 && (
+                      <>
+                        <div className="text-xs bg-muted text-muted-foreground py-1 px-2 w-full text-left min-h-[23px] truncate">
+                          &mdash;{" "}
+                          {language === "en"
+                            ? dayObj.day.events[0].name
+                            : dayObj.day.events[0].name}
+                        </div>
+                        {dayObj.day.events.length > 1 && (
+                          <div className="text-xs bg-muted text-muted-foreground py-1 px-2 w-full text-left min-h-[23px] truncate">
+                            + {dayObj.day.events.length - 1} more events
+                          </div>
+                        )}
+                      </>
+                    )}
+                </div>
+              )}
             </>
           ) : null}
         </div>
