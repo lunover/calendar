@@ -37,7 +37,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="bg-background min-h-screen p-4">
+          <div className="bg-background min-h-screen sm:p-2 md:p-4 lg:p-6">
             {children}
 
             <footer className="p-4">

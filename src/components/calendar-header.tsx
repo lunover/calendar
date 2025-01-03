@@ -110,7 +110,7 @@ export default function CalendarHeader({
 
   useEffect(() => {
     const month = currentMonthIndex;
-    const newUrl = `/${year}/${month.toString().padStart(2, "0")}`;
+    const newUrl = `/date/${year}/${month.toString().padStart(2, "0")}`;
     const url = new URL(window.location.href);
 
     if (url.pathname !== newUrl && currentMonthIndex !== initialMonthIndex) {
@@ -120,7 +120,7 @@ export default function CalendarHeader({
   }, [currentMonthIndex, year]);
 
   return (
-    <div className="flex items-center justify-between mb-6">
+    <div className="flex items-center justify-between mb-6 md:flex-row flex-col gap-4">
       <div className="space-y-2 select-text">
         <div className="flex items-center space-x-2">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-mono font-semibold uppercase">
@@ -138,7 +138,7 @@ export default function CalendarHeader({
           <div className="bg-muted h-6"></div>
         )}
       </div>
-      <div className="flex space-x-4 items-center">
+      <div className="flex gap-4 items-center flex-wrap justify-center">
         {showGoToToday && (
           <Link className="text-xs" href="/">
             {language === "en" ? "Go to Today" : "आजको दिन"}

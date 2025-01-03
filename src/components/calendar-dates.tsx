@@ -51,13 +51,13 @@ function generateCalendar(
   return daysArray;
 }
 
-function formatEnglishDate(enDate: string): string {
+function getEnglishDateArray(enDate: string): string[] {
   const date = new Date(enDate);
   const options: Intl.DateTimeFormatOptions = {
     month: "short",
     day: "numeric",
   };
-  return date.toLocaleDateString("en-US", options);
+  return date.toLocaleDateString("en-US", options).split(" ");
 }
 
 export default function CalendarDates({
@@ -89,10 +89,10 @@ export default function CalendarDates({
         <div
           key={index}
           className={cn(
-            "aspect-square md:aspect-[4/2] pt-2 pb-10 px-3 font-mono relative transition-all duration-100 text-left flex flex-col space-y-2 select-none bg-background h-full overflow-hidden text-4xl md:text-4xl lg:text-5xl 2xl:text-6xl",
+            "aspect-square md:aspect-[4/2] pt-1 sm:pt-2 pb-10 px-2 sm:px-4 font-mono relative transition-all duration-100 text-left flex flex-col space-y-2 select-none bg-background h-full overflow-hidden text-2xl sm:text-4xl md:text-4xl lg:text-5xl 2xl:text-6xl",
             !dayObj?.belongsToCurrentMonth &&
               "bg-[repeating-linear-gradient(-60deg,#dbdbdb,#dbdbdb_1px,transparent_1px,transparent_5px)] dark:bg-[repeating-linear-gradient(-60deg,#2C2C2C,#2C2C2C_1px,transparent_1px,transparent_5px)] opacity-40",
-            isToday(dayObj?.day || null) && "text-green-600 border-4 border-green-600",
+            isToday(dayObj?.day || null) && "text-green-600 ring-inset ring-2 sm:ring-4 ring-green-600",
             showEventsAndTithi && "text-lg",
             isSaturday(dayObj?.day || null) && "text-destructive"
           )}
@@ -106,7 +106,9 @@ export default function CalendarDates({
                   </span>
                 </div>
                 <div className={cn("text-sm lg:text-lg xl:text-xl 2xl:text-2xl text-gray-500", showEventsAndTithi && "text-sm", ((!dayObj?.belongsToCurrentMonth && dayObj?.day?.holiday) || isSaturday(dayObj?.day || null)) && "text-destructive")}>
-                  {formatEnglishDate(dayObj.day.enDate)}
+                  <span className="hidden md:inline">{getEnglishDateArray(dayObj.day.enDate)[0]}</span>
+                  {" "}
+                  <span className="">{getEnglishDateArray(dayObj.day.enDate)[1]}</span>
                 </div>
               </div>
 

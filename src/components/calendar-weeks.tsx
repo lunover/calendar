@@ -1,32 +1,24 @@
-const weekdays = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
-
-const nepaliWeekdays = [
-  "आइतबार",
-  "सोमबार",
-  "मंगलबार",
-  "बुधबार",
-  "बिहीबार",
-  "शुक्रबार",
-  "शनिबार",
-];
+import {
+  WEEK_NAME_ENG,
+  WEEK_NAME_NEP,
+  WEEK_NAME_ENG_SHORT,
+  WEEK_NAME_NEP_SHORT,
+} from "@/lib/constants";
 
 export default function CalendarWeeks({ language }: { language: string }) {
   return (
     <>
-      {weekdays.map((day, index) => (
+      {Array.from({ length: 7 }, (_, index) => (
         <div
-          key={day}
-          className="py-4 px-3 bg-background text-sm md:text-base lg:text-lg font-medium text-[#878787] font-mono uppercase"
+          key={index}
+          className="py-4 px-2 sm:px-4 bg-background text-sm md:text-base lg:text-lg font-medium text-[#878787] font-mono uppercase"
         >
-          {language === "en" ? day : nepaliWeekdays[index]}
+          <span className="hidden md:block">
+            {language === "en" ? WEEK_NAME_ENG.get(index) : WEEK_NAME_NEP.get(index)}
+          </span>
+          <span className="block md:hidden">
+            {language === "en" ? WEEK_NAME_ENG_SHORT.get(index) : WEEK_NAME_NEP_SHORT.get(index)}
+          </span>
         </div>
       ))}
     </>

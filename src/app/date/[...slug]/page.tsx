@@ -49,7 +49,7 @@ export default async function Page({
   const month = slug[1] ? parseInt(slug[1], 10) : null;
 
   if (!month) {
-    return redirect(`/${year}/01`);
+    return redirect(`/date/${year}/01`);
   }
 
   const cookieStore = await cookies();

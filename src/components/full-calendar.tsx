@@ -15,17 +15,6 @@ interface FullCalendarProps {
 }
 
 async function fetchCalendarData(year: number): Promise<CalendarData | null> {
-  // const response = await fetch(
-  //   `${process.env.NEXT_PUBLIC_API_URL}/api/calendar/${year}`
-  // );
-
-  // if (!response.ok) {
-  //   // throw new Error("Failed to fetch calendar data");
-  //   return null;
-  // }
-
-  // return response.json();
-
   const data = getCalendarData(year.toString());
 
   if ("error" in data) {
@@ -87,7 +76,7 @@ function FullCalendar({
       />
 
       <div className="grid grid-cols-7 gap-px border border-border bg-border">
-        <CalendarWeeks language={language}   />
+        <CalendarWeeks language={language} />
 
         {isLoading ? (
           <FullCalendarSkeleton />

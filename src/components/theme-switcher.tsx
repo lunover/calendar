@@ -8,11 +8,15 @@ import { Moon, Sun } from 'lucide-react'
 
 export function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false)
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme, resolvedTheme } = useTheme()
 
   // useEffect only runs on the client, so now we can safely show the UI
   useEffect(() => {
     setMounted(true)
+
+    if (theme === "system") {
+      setTheme(resolvedTheme || "dark")
+    }
   }, [])
 
   if (!mounted) {
@@ -34,4 +38,3 @@ export function ThemeSwitcher() {
     </div>
   )
 }
-

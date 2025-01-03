@@ -1,3 +1,43 @@
+const WEEK_NAME_ENG = new Map([
+  [0, "Sunday"],
+  [1, "Monday"],
+  [2, "Tuesday"],
+  [3, "Wednesday"],
+  [4, "Thursday"],
+  [5, "Friday"],
+  [6, "Saturday"],
+]);
+
+const WEEK_NAME_NEP = new Map([
+  [0, "आइतबार"],
+  [1, "सोमबार"],
+  [2, "मंगलबार"],
+  [3, "बुधबार"],
+  [4, "बिहीबार"],
+  [5, "शुक्रबार"],
+  [6, "शनिबार"],
+]);
+
+const WEEK_NAME_ENG_SHORT = new Map([
+  [0, "Sun"],
+  [1, "Mon"],
+  [2, "Tue"],
+  [3, "Wed"],
+  [4, "Thu"],
+  [5, "Fri"],
+  [6, "Sat"],
+]);
+
+const WEEK_NAME_NEP_SHORT = new Map([
+  [0, "आइत"],
+  [1, "सोम"],
+  [2, "मंगल"],
+  [3, "बुध"],
+  [4, "बिही"],
+  [5, "शुक्र"],
+  [6, "शनि"],
+]);
+
 const NEPALI_MONTHS_NAME = new Map([
   [1, "वैशाख"],
   [2, "जेष्ठ"],
@@ -59,4 +99,8 @@ export {
   ENGLISH_MONTHS_NAME,
   ENG_NEP_NUMBERS,
   NEP_ENG_NUMBERS,
+  WEEK_NAME_ENG,
+  WEEK_NAME_NEP,
+  WEEK_NAME_ENG_SHORT,
+  WEEK_NAME_NEP_SHORT,
 };
