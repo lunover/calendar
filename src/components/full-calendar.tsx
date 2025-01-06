@@ -1,89 +1,38 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { CalendarData, Month } from "../types/calendar";
-import FullCalendarSkeleton from "./full-calendar-skeleton";
+import React from "react";
 import CalendarHeader from "./calendar-header";
 import CalendarWeeks from "./calendar-weeks";
 import CalendarDates from "./calendar-dates";
-import { getCalendarData } from "@/lib/calendar";
+import { getFullMonthDates } from "@/lib/nepali-date";
 
 interface FullCalendarProps {
-  year: number;
-  initialMonthIndex: number;
+  bsYear?: number;
+  bsMonth?: number;
   language: string;
 }
 
-async function fetchCalendarData(year: number): Promise<CalendarData | null> {
-  const data = getCalendarData(year.toString());
-
-  if ("error" in data) {
-    return null;
-  }
-
-  return data;
-}
-
 function FullCalendar({
-  year: initialYear,
-  initialMonthIndex,
+  bsYear,
+  bsMonth,
   language,
 }: FullCalendarProps) {
-  const selectedMonthIndex = initialMonthIndex;
-  const [lastSelectedMonthIndex, setLastSelectedMonthIndex] =
-    useState<number>(initialMonthIndex);
-  const year = initialYear;
-  const [calendarData, setCalendarData] = useState<CalendarData | null>(null);
-  const [selectedMonth, setSelectedMonth] = useState<Month | null>(null);
-
-  const [dataFetched, setDataFetched] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchCalendarData(year);
-
-        if (data) {
-          setCalendarData(data);
-          setSelectedMonth(data[selectedMonthIndex - 1]);
-        }
-
-        if (selectedMonthIndex !== lastSelectedMonthIndex) {
-          setLastSelectedMonthIndex(selectedMonthIndex);
-        }
-
-        setDataFetched(true);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching calendar data:", error);
-      }
-    };
-
-    if (!dataFetched || lastSelectedMonthIndex !== selectedMonthIndex) {
-      fetchData();
-    }
-  }, [year, selectedMonthIndex, lastSelectedMonthIndex]);
+  const calendarData = getFullMonthDates(bsYear, bsMonth);
 
   return (
     <div className="p-4">
       <CalendarHeader
-        initialYear={initialYear}
-        calendarData={calendarData}
+        bsYear={bsYear}
+        bsMonth={bsMonth}
         language={language}
-        selectedMonthIndex={selectedMonthIndex}
-        selectedMonth={selectedMonth}
       />
 
       <div className="grid grid-cols-7 gap-px border border-border bg-border">
         <CalendarWeeks language={language} />
 
-        {isLoading ? (
-          <FullCalendarSkeleton />
-        ) : selectedMonth ? (
+        {calendarData ? (
           <CalendarDates
-            selectedMonth={selectedMonth}
-            calendarData={calendarData}
+            data={calendarData}
             language={language}
           />
         ) : (

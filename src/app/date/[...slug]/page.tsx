@@ -2,7 +2,7 @@ import FullCalendar from "@/components/full-calendar";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
-import { getMonthEnglishName } from "@/lib/calendar";
+import { __month } from "@/lib/translate";
 
 type Props = {
   params: Promise<{ slug: string[] }>;
@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const month = slug[1] ? parseInt(slug[1], 10) : null;
 
   // title format: Nepali Calendar - 2080 Baishakh
-  const monthName = month ? getMonthEnglishName(month) : "";
+  const monthName = month ? __month(month.toString(), "en") : "";
 
   return {
     title: `Nepali Calendar - ${year} ${monthName}`,
@@ -57,8 +57,8 @@ export default async function Page({
 
   return (
     <FullCalendar
-      year={parseInt(year, 10)}
-      initialMonthIndex={month}
+      bsYear={parseInt(year, 10)}
+      bsMonth={month}
       language={language}
     />
   );
