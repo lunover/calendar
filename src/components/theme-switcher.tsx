@@ -17,7 +17,7 @@ export function ThemeSwitcher() {
     if (theme === "system") {
       setTheme(resolvedTheme || "dark")
     }
-  }, [])
+  }, [theme, resolvedTheme])
 
   if (!mounted) {
     return null

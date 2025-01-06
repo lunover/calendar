@@ -1,31 +1,29 @@
 import FullCalendar from "@/components/full-calendar";
-import { getMonthEnglishName, getNepaliDate } from "@/lib/calendar";
+import { getToday } from "@/lib/nepali-date";
+import { __month } from "@/lib/translate";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata(): Promise<Metadata> {
-  const data = getNepaliDate(new Date().toISOString().split('T')[0], 'ad-bs');
-  const bsDate = data?.bs || '2081-01-01';
-  const year = bsDate.split('-')[0];
-  const month = parseInt(bsDate.split('-')[1], 10);
-  const day = parseInt(bsDate.split('-')[2], 10).toString().padStart(2, '0');
+  const today = getToday();
+  const year = today.bs.year;
+  const month = today.bs.month;
+  const day = today.bs.day.toString().padStart(2, "0");
 
   // title format: Nepali Calendar - 2080 Baishakh
-  const monthName = month ? getMonthEnglishName(month) : "";
+  const monthName = __month(month.toString(), "en");
 
   return {
-    title: `Nepali Calendar - Today is ${year} ${monthName} ${day}`,
+    title: `Nepali Date - Today is ${year} ${monthName} ${day}`,
+    description: `Today is ${year} ${monthName} ${day} in Nepali calendar.`,
   };
 }
 
 export default async function Home() {
-  const data = getNepaliDate(new Date().toISOString().split('T')[0], 'ad-bs');
-  const bsDate = data?.bs || '2081-01-01';
-  const year = bsDate.split('-')[0];
-  const month = parseInt(bsDate.split('-')[1], 10);
-
   const cookieStore = await cookies();
-  const language = cookieStore.get('language')?.value || 'en';
+  const language = cookieStore.get("language")?.value || "en";
 
-  return <FullCalendar year={parseInt(year, 10)} initialMonthIndex={month} language={language} />;
+  return <FullCalendar language={language} />;
 }
