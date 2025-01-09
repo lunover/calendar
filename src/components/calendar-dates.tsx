@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { CalendarDateType } from "@/lib/nepali-date";
 import { __numbers } from "@/lib/translate";
 import { MONTH_NAME_EN } from "@/lib/constants/nepali-texts";
+import { useToast } from "@/hooks/use-toast";
 
 type CalendarDatesProps = {
   data: CalendarDateType[][] | null;
@@ -9,6 +10,8 @@ type CalendarDatesProps = {
 };
 
 export default function CalendarDates({ data, language }: CalendarDatesProps) {
+  const { toast } = useToast();
+
   const isHoliday = (day: number) => {
     return isSaturday(day);
   };
@@ -44,6 +47,21 @@ export default function CalendarDates({ data, language }: CalendarDatesProps) {
                 "text-green-600 ring-inset ring-2 sm:ring-4 ring-green-600",
               isHoliday(weekNumber) && "text-destructive"
             )}
+            onClick={() => {
+              const year = date.bs.year;
+              const month = date.bs.month.toString().padStart(2, "0");
+              const day = date.bs.day.toString().padStart(2, "0");
+              const nepaliDate = `${year}-${month}-${day}`;
+              navigator.clipboard.writeText(nepaliDate);
+
+              const { dismiss } = toast({
+                title: `Date Copied: ${nepaliDate} BS`,
+              });
+
+              setTimeout(() => {
+                dismiss();
+              }, 1500);
+            }}
           >
             <div className="flex justify-between lg:items-center flex-col lg:flex-row">
               <div

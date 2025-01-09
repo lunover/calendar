@@ -100,7 +100,7 @@ export default function CalendarHeader({
       url.pathname = newUrl;
       router.push(url.toString());
     }
-  }, [nextMonth, nextYear, bsYear, bsMonth]);
+  }, [nextMonth, nextYear, bsYear, bsMonth, router]);
 
   return (
     <div className="flex items-center justify-between mb-6 md:flex-row flex-col gap-4">
