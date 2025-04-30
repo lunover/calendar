@@ -48,6 +48,7 @@ export default function RootLayout({
                 <a
                   href="https://lunover.com"
                   target="_blank"
+                  rel="noreferrer"
                   className="underline"
                 >
                   Lunover
@@ -56,6 +57,7 @@ export default function RootLayout({
                 <a
                   href="https://github.com/lunover/calendar"
                   target="_blank"
+                  rel="noreferrer"
                   className="underline"
                 >
                   GitHub

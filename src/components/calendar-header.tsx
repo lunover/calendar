@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Select,
   SelectContent,
@@ -6,12 +8,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ThemeSwitcher } from "./theme-switcher";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import LanguageSwitcher from "./language-switcher";
 import {
-  CalendarDateType,
+  type CalendarDateType,
   getAllBsYears,
   getFullMonthDates,
   getToday,
@@ -45,62 +46,54 @@ const getFormattedMonthYear = (data: CalendarDateType[][]) => {
   return `${firstYear} / ${lastYear} ${firstMonth} / ${lastMonth}`;
 };
 
-export default function CalendarHeader({
-  bsYear,
-  bsMonth,
-  language,
-}: CalendarHeaderProps) {
+export default function CalendarHeader({ language }: CalendarHeaderProps) {
+  const { slug } = useParams<{ slug: string[] }>();
   const today = getToday();
 
-  if (!bsYear || !bsMonth) {
-    bsYear = today.bs.year;
-    bsMonth = today.bs.month;
-  }
-  const calendarData = getFullMonthDates(bsYear, bsMonth);
-  const displayYear = __numbers(bsYear.toString(), language);
-  const displayMonth = __month(bsMonth.toString(), language);
+  const year = slug?.length ? Number.parseInt(slug[0], 10) : today.bs.year;
+  const month =
+    slug?.length > 1 ? Number.parseInt(slug[1], 10) : today.bs.month;
 
-  const [nextMonth, setNextMonth] = useState(bsMonth);
-  const [nextYear, setNextYear] = useState(bsYear);
+  const calendarData = getFullMonthDates(year, month);
+  const displayYear = __numbers(year.toString(), language);
+  const displayMonth = __month(month.toString(), language);
 
-  const showGoToToday = !(today.bs.year === bsYear && today.bs.month === bsMonth);
+  const showGoToToday = !(today.bs.year === year && today.bs.month === month);
   const formattedMonthYearText = getFormattedMonthYear(calendarData);
   const years = getAllBsYears();
   const router = useRouter();
 
-  const handleMonthChange = (value: string) => {
-    setNextMonth(parseInt(value, 10));
-  };
-
-  const handleYearChange = (value: string) => {
-    setNextYear(parseInt(value, 10));
-  };
-
-  const navigateMonth = (offset: number) => {
-    let newMonthIndex = nextMonth + offset;
-    let newYear = nextYear;
-
-    if (newMonthIndex == 0) {
-      newMonthIndex = 12; // Chaitra
-      newYear -= 1;
-    } else if (newMonthIndex > 12) {
-      newMonthIndex = 1; // Baisakh
-      newYear += 1;
+  const nextLink = () => {
+    let nextMonth = month + 1;
+    let nextYear = year;
+    if (nextMonth > 12) {
+      nextMonth = 1;
+      nextYear = year + 1;
     }
-
-    setNextMonth(newMonthIndex);
-    setNextYear(newYear);
-  };
-
-  useEffect(() => {
     const newUrl = `/date/${nextYear}/${nextMonth.toString().padStart(2, "0")}`;
-    const url = new URL(window.location.href);
+    return newUrl;
+  };
 
-    if (url.pathname !== newUrl && `${nextYear}/${nextMonth}` !== `${bsYear}/${bsMonth}`) {
-      url.pathname = newUrl;
-      router.push(url.toString());
+  const prevLink = () => {
+    let prevMonth = month - 1;
+    let prevYear = year;
+    if (prevMonth < 1) {
+      prevMonth = 12;
+      prevYear = year - 1;
     }
-  }, [nextMonth, nextYear, bsYear, bsMonth, router]);
+    const newUrl = `/date/${prevYear}/${prevMonth.toString().padStart(2, "0")}`;
+    return newUrl;
+  };
+
+  const yearChangeLink = (year: string) => {
+    const newUrl = `/date/${year}/${month.toString().padStart(2, "0")}`;
+    router.push(newUrl);
+  };
+
+  const monthChangeLink = (month: string) => {
+    const newUrl = `/date/${year}/${month.toString().padStart(2, "0")}`;
+    router.push(newUrl);
+  };
 
   return (
     <div className="flex items-center justify-between mb-6 md:flex-row flex-col gap-4">
@@ -126,9 +119,11 @@ export default function CalendarHeader({
         <LanguageSwitcher language={language} />
 
         <div className="flex items-center border h-9">
-          <button
+          <Link
             className="inline-flex items-center justify-center text-sm font-medium transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 hover:text-accent-foreground p-0 w-10 h-6 hover:bg-transparent"
-            onClick={() => navigateMonth(-1)}
+            href={prevLink()}
+            shallow={true}
+            prefetch={true}
           >
             <svg
               stroke="currentColor"
@@ -140,16 +135,15 @@ export default function CalendarHeader({
               width="1em"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path fill="none" d="M0 0h24v24H0z"></path>
-              <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+              <title>Previous Month</title>
+              <path fill="none" d="M0 0h24v24H0z" />
+              <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
             </svg>
-          </button>
+          </Link>
 
-          <Select value={nextYear.toString()} onValueChange={handleYearChange}>
+          <Select value={year.toString()} onValueChange={yearChangeLink}>
             <SelectTrigger className="w-[60px] text-center px-0 text-base rounded-none border-none [&>svg]:hidden justify-center focus:ring-0 shadow-none">
-              <SelectValue
-                placeholder={__numbers(nextYear.toString(), language)}
-              />
+              <SelectValue placeholder={__numbers(year.toString(), language)} />
             </SelectTrigger>
             <SelectContent className="rounded-none min-w-[120px] -left-[40px]">
               {years.map((year) => (
@@ -164,17 +158,15 @@ export default function CalendarHeader({
             </SelectContent>
           </Select>
 
-          <Select value={nextMonth.toString()} onValueChange={handleMonthChange}>
+          <Select value={month.toString()} onValueChange={monthChangeLink}>
             <SelectTrigger className="w-[80px] text-center px-0 text-base rounded-none border-none [&>svg]:hidden justify-center focus:ring-0 shadow-none">
-              <SelectValue
-                placeholder={__month(nextMonth.toString(), language)}
-              />
+              <SelectValue placeholder={__month(month.toString(), language)} />
             </SelectTrigger>
             <SelectContent className="rounded-none min-w-[120px] -left-[20px]">
               {Object.keys(MONTH_NAME_LONG).map((name, index) => (
                 <SelectItem
                   className="rounded-none"
-                  key={index}
+                  key={name}
                   value={(index + 1).toString()}
                 >
                   {__month(name, language)}
@@ -183,9 +175,11 @@ export default function CalendarHeader({
             </SelectContent>
           </Select>
 
-          <button
+          <Link
             className="inline-flex items-center justify-center text-sm font-medium transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 hover:text-accent-foreground p-0 w-10 h-6 hover:bg-transparent"
-            onClick={() => navigateMonth(1)}
+            href={nextLink()}
+            shallow={true}
+            prefetch={true}
           >
             <svg
               stroke="currentColor"
@@ -197,10 +191,11 @@ export default function CalendarHeader({
               width="1em"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path fill="none" d="M0 0h24v24H0z"></path>
-              <path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+              <title>Next Month</title>
+              <path fill="none" d="M0 0h24v24H0z" />
+              <path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
             </svg>
-          </button>
+          </Link>
         </div>
       </div>
     </div>

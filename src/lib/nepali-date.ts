@@ -107,13 +107,10 @@ function calculateAdDateFromBs(bsYear: number, bsMonth: number, bsDay: number, r
 }
 
 export function getFullMonthDates(bsYear?: number, bsMonth?: number): CalendarDateType[][] {
-    if (!bsYear || !bsMonth) {
-        const today = getToday();
-        bsYear = today.bs.year;
-        bsMonth = today.bs.month;
-    }
+    const effectiveYear = bsYear ?? getToday().bs.year;
+    const effectiveMonth = bsMonth ?? getToday().bs.month;
 
-    const monthData = NEPALI_MONTH_DATA[bsYear][bsMonth - 1];
+    const monthData = NEPALI_MONTH_DATA[effectiveYear][effectiveMonth - 1];
     const startWeekDay = monthData[0];
     const totalDaysInMonth = monthData[1];
 
@@ -121,8 +118,8 @@ export function getFullMonthDates(bsYear?: number, bsMonth?: number): CalendarDa
     let currentWeek: CalendarDateType[] = [];
 
     // Determine the previous month and year
-    let prevMonth = bsMonth - 1;
-    let prevYear = bsYear;
+    let prevMonth = effectiveMonth - 1;
+    let prevYear = effectiveYear;
     if (prevMonth < 1) {
         prevMonth = 12;
         prevYear -= 1;
@@ -162,8 +159,8 @@ export function getFullMonthDates(bsYear?: number, bsMonth?: number): CalendarDa
     }
 
     // Determine the next month and year
-    let nextMonth = bsMonth + 1;
-    let nextYear = bsYear;
+    let nextMonth = effectiveMonth + 1;
+    let nextYear = effectiveYear;
     if (nextMonth > 12) {
         nextMonth = 1;
         nextYear += 1;
