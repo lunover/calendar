@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { __month } from "@/lib/translate";
+import { getHolidays } from "@/lib/holidays";
+import { getToday } from "@/lib/nepali-date";
 
 type Props = {
   params: Promise<{ slug: string[] }>;
@@ -13,7 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = (await params).slug;
 
   const year = slug[0];
-  const month = slug[1] ? parseInt(slug[1], 10) : null;
+  const month = slug[1] ? Number.parseInt(slug[1], 10) : null;
 
   // title format: Nepali Calendar - 2080 Baishakh
   const monthName = month ? __month(month.toString(), "en") : "";
@@ -25,7 +27,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 // Return a list of `params` to populate the [slug] dynamic segment
 export function generateStaticParams() {
-  const years = Array.from({ length: 2083 - 2080 }, (_, i) => 2080 + i);
+  const today = getToday();
+  const year = today.bs.year;
+  const years = Array.from({ length: 2 }, (_, i) => year + i);
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
 
   const items = years.flatMap((year) =>
@@ -45,8 +49,8 @@ export default async function Page({
   params: Promise<{ slug: string[] }>;
 }) {
   const { slug } = await params;
-  const year = slug[0];
-  const month = slug[1] ? parseInt(slug[1], 10) : null;
+  const year = Number.parseInt(slug[0], 10);
+  const month = slug[1] ? Number.parseInt(slug[1], 10) : null;
 
   if (!month) {
     return redirect(`/date/${year}/01`);
@@ -54,12 +58,14 @@ export default async function Page({
 
   const cookieStore = await cookies();
   const language = cookieStore.get("language")?.value || "en";
+  const holidays = await getHolidays(year);
 
   return (
     <FullCalendar
-      bsYear={parseInt(year, 10)}
+      bsYear={year}
       bsMonth={month}
       language={language}
+      holidays={holidays}
     />
   );
 }

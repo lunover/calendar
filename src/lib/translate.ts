@@ -15,7 +15,7 @@ export function __numbers(text: string, language: string): string {
   const numbers = text.split(" ");
   const translatedNumbers = numbers.map((number) => {
     return number.replace(/0|1|2|3|4|5|6|7|8|9/g, (match) => {
-      return NEPALI_NUMBERS[parseInt(match)];
+      return NEPALI_NUMBERS[Number.parseInt(match)];
     });
   });
 
@@ -23,9 +23,9 @@ export function __numbers(text: string, language: string): string {
 }
 
 export function __month(text: string, language: string): string {
-  const maybeMonthNumber = parseInt(text, 10);
+  const maybeMonthNumber = Number.parseInt(text, 10);
 
-  if (!isNaN(maybeMonthNumber)) {
+  if (!Number.isNaN(maybeMonthNumber)) {
     let monthName = "";
 
     if (language === "en") {
@@ -47,11 +47,11 @@ export function __month(text: string, language: string): string {
 export function __week(
   text: string,
   language: string,
-  short: boolean = false
+  short = false
 ): string {
-  const maybeWeekNumber = parseInt(text, 10);
+  const maybeWeekNumber = Number.parseInt(text, 10);
 
-  if (!isNaN(maybeWeekNumber)) {
+  if (!Number.isNaN(maybeWeekNumber)) {
     let weekName = "";
 
     if (language === "en") {
